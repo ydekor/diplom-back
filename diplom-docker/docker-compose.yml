@@ -1,0 +1,11 @@
+version: '3'
+services:
+  db-auth:
+    image: 'postgres:15.2'
+    container_name: 'diplom-db'
+    environment:
+      - 'POSTGRES_DB=diplom-db'
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=postgres'
+    ports:
+      - '5432:5432'

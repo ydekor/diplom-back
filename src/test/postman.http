@@ -1,0 +1,25 @@
+POST http://localhost:9000/user
+Content-Type: application/json
+
+{
+  "username": "ananas",
+  "password": "11111",
+  "email": "ananas@gmail.com"
+}
+
+###
+GET http://localhost:9000/user/52
+
+###
+DELETE http://localhost:9000/user/52
+
+###
+PUT http://localhost:9000/user
+Content-Type: application/json
+
+{
+  "id": 52,
+  "username": "aboba",
+  "password": "22222",
+  "email": "ananas@yandex.ru"
+}
