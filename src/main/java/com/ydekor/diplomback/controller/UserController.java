@@ -5,6 +5,7 @@ import com.ydekor.diplomback.model.User;
 import com.ydekor.diplomback.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping
     public Long createUser(@RequestBody UserDto userDto) {
@@ -21,7 +23,7 @@ public class UserController {
         return userRepository.save(User.builder()
                 .email(userDto.getEmail())
                 .username(userDto.getUsername())
-                .password(userDto.getPassword())
+                .password(passwordEncoder.encode(userDto.getPassword()))
                 .build()).getId();
     }
 
