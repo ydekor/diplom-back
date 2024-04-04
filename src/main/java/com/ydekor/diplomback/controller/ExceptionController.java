@@ -10,9 +10,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @ResponseBody
 public class ExceptionController extends ResponseEntityExceptionHandler {
+    public record ErrorMessageResponse (String message) {}
 
     @ExceptionHandler(value = {RuntimeException.class})
-    ResponseEntity<Object> exceptionHandler(RuntimeException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    ResponseEntity<ErrorMessageResponse> exceptionHandler(RuntimeException ex) {
+        return new ResponseEntity<>(new ErrorMessageResponse(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

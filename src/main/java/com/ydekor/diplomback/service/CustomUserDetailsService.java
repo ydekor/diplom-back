@@ -20,7 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         log.info("Try to login {}", username);
         return userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
 }

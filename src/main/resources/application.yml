@@ -10,3 +10,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
+application:
+  allowed:
+    methods: "POST,GET,PUT,DELETE"
+    origins: "http://localhost:3000,http://localhost:3001"
