@@ -2,9 +2,11 @@ package com.ydekor.diplomback.config;
 
 import com.ydekor.diplomback.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,10 +15,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -32,16 +36,19 @@ public class SecurityConfiguration {
                 .httpBasic(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.POST, "/user", "/api/auth/login").permitAll()
-                        .requestMatchers("/user", "/user/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
+                        .requestMatchers( "/api/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/login.html")
-                                .successForwardUrl("/")
+                                .defaultSuccessUrl("/index.html")
                                 .loginProcessingUrl("/api/auth/login")
-                                .failureUrl("/error.html")
+//                                .failureHandler((rq, rs, auth) -> {
+//                                    rs.setStatus(403); // FORBIDDEN
+//                                })
+                                .failureHandler(new SimpleUrlAuthenticationFailureHandler()) // 401 - postman / 302 - browser
                                 .permitAll()
                 )
                 .logout(logout ->

@@ -1,3 +1,4 @@
+### create
 POST http://localhost:9000/user
 Content-Type: application/json
 
@@ -7,13 +8,13 @@ Content-Type: application/json
   "email": "ananas@gmail.com"
 }
 
-###
+### get
 GET http://localhost:9000/user/1
 
-###
+### delete
 DELETE http://localhost:9000/user/52
 
-###
+### update
 PUT http://localhost:9000/user
 Content-Type: application/json
 
@@ -23,3 +24,10 @@ Content-Type: application/json
   "password": "22222",
   "email": "ananas@yandex.ru"
 }
+
+### login
+POST http://localhost:9000/user
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; username = test1; password = 1
