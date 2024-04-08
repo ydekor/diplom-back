@@ -14,3 +14,7 @@ application:
   allowed:
     methods: "POST,GET,PUT,DELETE"
     origins: "http://localhost:3000,http://localhost:3001"
+  jwt:
+    secretKey: оченьсекретныйпароль
+    tokenPrefix: Bearer.
+    tokenExpiration: 100

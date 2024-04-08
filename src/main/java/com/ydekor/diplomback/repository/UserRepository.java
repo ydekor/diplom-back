@@ -1,12 +1,13 @@
 package com.ydekor.diplomback.repository;
 
-import com.ydekor.diplomback.model.User;
-import org.springframework.data.repository.CrudRepository;
+import com.ydekor.diplomback.model.user.SpaUser;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends JpaRepository<SpaUser, Long> {
 
-    Optional<User> findByUsername(String username);
+    Optional<SpaUser> findByLogin(@Param("login") String login);
 
 }

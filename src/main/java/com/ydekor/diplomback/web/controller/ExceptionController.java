@@ -1,4 +1,4 @@
-package com.ydekor.diplomback.controller;
+package com.ydekor.diplomback.web.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

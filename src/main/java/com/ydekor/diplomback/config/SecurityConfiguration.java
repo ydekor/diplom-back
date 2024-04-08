@@ -1,76 +1,68 @@
 package com.ydekor.diplomback.config;
 
-import com.ydekor.diplomback.service.CustomUserDetailsService;
+import com.ydekor.diplomback.config.filter.JwtAuthFilter;
+import com.ydekor.diplomback.config.properties.CorsProperties;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
-@Slf4j
 @Configuration
-@EnableWebSecurity
 @RequiredArgsConstructor
+@EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final CustomUserDetailsService userDetailsService;
-    private final CorsProperties corsProperties;
+    private final JwtAuthFilter jwtAuthFilter;
+    private final CorsProperties corsConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(withDefaults()) // defaults use bean "corsConfigurationSource"
-                .httpBasic(withDefaults())
+                .cors(Customizer.withDefaults())    // defaults use bean "corsConfigurationSource"
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
-                        .requestMatchers( "/api/auth/login", "/", "/index.html").permitAll()
+                        .requestMatchers(
+                                "/user/login",
+                                "/user/emailConfirm",
+                                "/user",
+                                "/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**"
+                        ).permitAll()
+
+                        .requestMatchers("/admin-user", "/admin-user/*").hasAnyAuthority("ADMIN", "OWNER")
+                        .requestMatchers("/phone","/phone/**", "phone/sms/**").hasAnyAuthority("PAGE_PHONE")
+                        .requestMatchers("/api/feeding/*").hasAnyAuthority("PAGE_FEEDING")
+                        .requestMatchers("/info", "/info/*").hasAnyAuthority("PAGE_INFO")
+                        .requestMatchers("/doings-task", "/doings-task/*",
+                                "/doings-label", "/doings-label/*",
+                                "/doings-log", "/doings-log/*"
+                                ).hasAnyAuthority("PAGE_DOINGS")
+                        .requestMatchers(//"/cash-wallet", "/cash-wallet/*",
+                                "/cash-transaction", "/cash-transaction/*",
+                                "/cash-report", "/cash-report/*"
+                                ).hasAnyAuthority("PAGE_CASH")
+                        .requestMatchers(
+                                "/cooking-category", "/cooking-category/*",
+//                                "/cooking-dish", "/cooking-dish/*",
+                                "/cooking-receipt", "/cooking-receipt/*"
+                                ).hasAnyAuthority("PAGE_COOKING")
+
                         .anyRequest().authenticated()
-                )
-                .formLogin(formLogin ->
-                        formLogin
-                                .loginPage("/login.html")
-//                                .defaultSuccessUrl("/index.html")
-                                .loginProcessingUrl("/api/auth/login")
-//                                .failureHandler((rq, rs, auth) -> {
-//                                    rs.setStatus(403); // FORBIDDEN
-//                                })
-                                .failureHandler(new SimpleUrlAuthenticationFailureHandler()) // 401 - postman / 302 - browser
-                                .permitAll()
-                )
-                .logout(logout ->
-                        logout
-                                .logoutUrl("/api/auth/logout")
-                )
-                .build();
+                ).build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        return new CorsConfig(corsProperties);
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
+    CorsConfigurationSource corsConfigurationSource() {
+        return new CorsConfig(corsConfig);
     }
 }

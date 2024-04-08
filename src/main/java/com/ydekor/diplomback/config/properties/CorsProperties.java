@@ -1,4 +1,4 @@
-package com.ydekor.diplomback.config;
+package com.ydekor.diplomback.config.properties;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

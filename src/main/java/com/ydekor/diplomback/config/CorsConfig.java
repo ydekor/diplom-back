@@ -1,5 +1,6 @@
 package com.ydekor.diplomback.config;
 
+import com.ydekor.diplomback.config.properties.CorsProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
