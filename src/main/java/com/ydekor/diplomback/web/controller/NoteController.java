@@ -1,7 +1,9 @@
 package com.ydekor.diplomback.web.controller;
 
 import com.ydekor.diplomback.model.note.Note;
-import com.ydekor.diplomback.service.auth.NoteService;
+import com.ydekor.diplomback.service.NoteService;
+import com.ydekor.diplomback.web.dto.NoteDto;
+import com.ydekor.diplomback.web.dto.ShareNoteDto;
 import com.ydekor.diplomback.web.dto.SimpleResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +38,14 @@ public class NoteController {
     }
 
     @GetMapping("/{id}")
-    public Note getOneNote(@PathVariable Long id) {
+    public NoteDto getOneNote(@PathVariable Long id) {
         return noteService.getById(id);
     }
+
+
+    @PutMapping("/share")
+    public Note shareNote(@RequestBody ShareNoteDto shareNoteDto) {
+        return noteService.shareNote(shareNoteDto.getNoteId(), shareNoteDto.getUserEmail());
+    }
+
 }

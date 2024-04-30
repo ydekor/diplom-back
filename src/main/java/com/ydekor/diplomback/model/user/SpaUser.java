@@ -1,5 +1,6 @@
 package com.ydekor.diplomback.model.user;
 
+import com.ydekor.diplomback.model.note.Note;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -57,6 +58,15 @@ public class SpaUser implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<SpaRole> roles;
+
+    @ManyToMany
+    @JoinTable(
+            name = "note_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "note_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"note_id", "user_id"})}
+    )
+    private List<Note> notes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

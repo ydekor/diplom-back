@@ -61,6 +61,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public SpaUser getUserByEmail(String email) {
+        return userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new BadRequestException("email='" + email + "'"));
+    }
+
     public List<SpaUser> getAllUsers() {
         return userRepository.findAll();
     }

@@ -10,4 +10,6 @@ public interface UserRepository extends JpaRepository<SpaUser, Long> {
 
     Optional<SpaUser> findByLogin(@Param("login") String login);
 
+    Optional<SpaUser> findByEmail(@Param("email") String email);
+
 }
