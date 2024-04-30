@@ -34,28 +34,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(
                                 "/user/login",
-                                "/user/emailConfirm",
-                                "/user",
-                                "/api/v1/auth/**", "/v3/api-docs/**", "/swagger-ui/**"
+                                "/user"
                         ).permitAll()
-
-                        .requestMatchers("/admin-user", "/admin-user/*").hasAnyAuthority("ADMIN", "OWNER")
-                        .requestMatchers("/phone","/phone/**", "phone/sms/**").hasAnyAuthority("PAGE_PHONE")
-                        .requestMatchers("/api/feeding/*").hasAnyAuthority("PAGE_FEEDING")
-                        .requestMatchers("/info", "/info/*").hasAnyAuthority("PAGE_INFO")
-                        .requestMatchers("/doings-task", "/doings-task/*",
-                                "/doings-label", "/doings-label/*",
-                                "/doings-log", "/doings-log/*"
-                                ).hasAnyAuthority("PAGE_DOINGS")
-                        .requestMatchers(//"/cash-wallet", "/cash-wallet/*",
-                                "/cash-transaction", "/cash-transaction/*",
-                                "/cash-report", "/cash-report/*"
-                                ).hasAnyAuthority("PAGE_CASH")
-                        .requestMatchers(
-                                "/cooking-category", "/cooking-category/*",
-//                                "/cooking-dish", "/cooking-dish/*",
-                                "/cooking-receipt", "/cooking-receipt/*"
-                                ).hasAnyAuthority("PAGE_COOKING")
 
                         .anyRequest().authenticated()
                 ).build();

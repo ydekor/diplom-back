@@ -18,7 +18,5 @@ public class SpaUserDto {
     @NotNull private String password;
     private String email;
     private Long created;
-    private String message;
     private List<String> roles;
-
 }

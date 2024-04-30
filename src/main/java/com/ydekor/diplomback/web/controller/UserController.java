@@ -17,7 +17,7 @@ public class UserController extends ExceptionHandlerController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
-    @PutMapping
+    @PostMapping
     public SpaUserDto register(@RequestBody SpaUserDto dto) {
         return userService.create(dto);
     }
