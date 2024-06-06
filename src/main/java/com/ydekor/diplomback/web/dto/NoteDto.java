@@ -2,6 +2,7 @@ package com.ydekor.diplomback.web.dto;
 
 
 import com.ydekor.diplomback.model.note.NoteType;
+import com.ydekor.diplomback.model.tag.Tag;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -18,5 +19,5 @@ public class NoteDto {
     private LocalDateTime notificationDate;
     private String backgroundColor;
     private List<String> userEmails = new ArrayList<>();
-
+    private List<Tag> tags;
 }

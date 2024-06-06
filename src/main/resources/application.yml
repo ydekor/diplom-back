@@ -18,3 +18,4 @@ application:
     secretKey: оченьсекретныйпароль
     tokenPrefix: Bearer.
     tokenExpiration: 100
+    

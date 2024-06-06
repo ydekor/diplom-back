@@ -2,6 +2,7 @@ package com.ydekor.diplomback.model.note;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ydekor.diplomback.model.tag.Tag;
 import com.ydekor.diplomback.model.user.SpaUser;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@ToString
 public class Note {
 
     @Id
@@ -36,4 +38,6 @@ public class Note {
     )
     private List<SpaUser> users;
 
+    @ManyToMany(mappedBy = "notes")
+    private List<Tag> tags;
 }
